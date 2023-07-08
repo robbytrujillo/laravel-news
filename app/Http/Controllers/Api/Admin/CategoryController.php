@@ -79,8 +79,42 @@ public function show($id) {
     }
 
     // return failed with Api Resource
-    return new CategoryResource(false, 'Tidak Ada Data Dengan ID Ini!', null);
+    return new CategoryResource(false, 'Detail Data Category Tidak Ditemukan!', null);
 }
 
+/**
+ * Update the specified resource in storage
+ * 
+ * @param \Illuminate\Http\Request $request
+ * @param int $id
+ * @return \Illuminate\Http\Response
+ */
+public function update(Request $request, Category $category) {
+    $validator = Validator::make($request->all(), [
+        'name' => 'required|unique:categories, name,'.$category->id,
+    ]);
+
+    if ($validator->fails()) {
+        return response()->json($validator->errors(), 422);
+    }
+
+    //check image update
+    if($request->file('image')) {
+        //remove old image
+        Storage::disk('local')->delete('public/categories/'.basename($category->image));
+
+        //upload new image
+        $image = $request->file('image');
+        $image->storeAs('public/categories',$image->hashName());
+
+        //update category with new image
+        $category->update([
+            'image'=>$image->hashName(),
+            'name' =>$request->name,
+            'slug'=>Str::slug($request->name, '-'),
+        ]);
+        
+    }
+}
 
 }
