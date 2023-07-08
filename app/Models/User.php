@@ -2,58 +2,87 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject; // <-- import JWTSubject-- import JWTSubject
 
-// class User extends Authenticatable
-// {
-//     use HasApiTokens, HasFactory, Notifiable;
+class User extends Authenticatable implements JWTSubject // <-- tambahkan ini
+{
+    use HasApiTokens, HasFactory, Notifiable;
 
-//     /**
-//      * The attributes that are mass assignable.
-//      *
-//      * @var array<int, string>
-//      */
-//     protected $fillable = [
-//         'name',
-//         'email',
-//         'password',
-//     ];
-
-//     /**
-//      * The attributes that should be hidden for serialization.
-//      *
-//      * @var array<int, string>
-//      */
-//     protected $hidden = [
-//         'password',
-//         'remember_token',
-//     ];
-
-//     /**
-//      * The attributes that should be cast.
-//      *
-//      * @var array<string, string>
-//      */
-//     protected $casts = [
-//         'email_verified_at' => 'datetime',
-//     ];
-// }
-
-class User extends Model {
-     /**
-     * Get the user's first name.
+    /**
+     * The attributes that are mass assignable.
      *
-     * @return \Illuminate\Database\Eloquent\Casts\Attribute
+     * @var array<int, string>
      */
-    protected function name(): Attribute {
-        return Attribute::make(
-            get: fn ($value) => strtoupper($value),
-        );
+    protected $fillable = [
+        'name',
+        'email',
+        'password',
+    ];
+
+    /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var array<int, string>
+     */
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+    ];
+
+    /**
+     * posts
+     *
+     * @return void
+     */
+    public function posts()
+    {
+        return $this->hasMany(Post::class);
     }
+
+    /**
+     * getJWTIdentifier
+     *
+     * @return void
+     */
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+        
+    /**
+     * getJWTCustomClaims
+     *
+     * @return void
+     */
+    public function getJWTCustomClaims()
+    {
+        return [];
+    }
+
+
+// class User extends Model {
+//      /**
+//      * Get the user's first name.
+//      *
+//      * @return \Illuminate\Database\Eloquent\Casts\Attribute
+//      */
+//     protected function name(): Attribute {
+//         return Attribute::make(
+//             get: fn ($value) => strtoupper($value),
+//         );
+//     }
 }
