@@ -35,4 +35,10 @@ Route::prefix('admin')->group(function () {
         //logout
         Route::post('/logout',[App\Http\Controllers\Api\Admin\LoginController::class,'logout']);
     });
+    //Category
+    Route::apiResource('/categories',App\Http\Controllers\Api\Admin\CategoryController::class);
+    //Post
+    Route::apiResource('/posts', App\Http\Controllers\Api\Admin\PostController::class);
+    //Users
+    Route::apiResource('/users', App\Http\Controllers\Api\Admin\UserController::class);
 });
