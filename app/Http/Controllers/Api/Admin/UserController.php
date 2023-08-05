@@ -133,5 +133,6 @@ class UserController extends Controller
 
         //return failed with Api Resource
         return new UserResource(false, 'Data User Gagal Dihapus!', null);
+        
     } 
 }
