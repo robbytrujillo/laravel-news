@@ -42,3 +42,15 @@ Route::prefix('admin')->group(function () {
     //Users
     Route::apiResource('/users', App\Http\Controllers\Api\Admin\UserController::class);
 });
+
+Route::prefix('web')->group(function() {
+
+    //index categories
+    Route::get('/categories',[App\Http\Controllers\Web\CategoryController::class, 'index']);
+
+    //show category
+    Route::get('/categories/{slug}',[App\Http\Controllers\Api\Web\CategoryController::class,'show']);
+
+    //categories sidebar
+    Route::get('/categorySidebar',[App\Http\Controllers\Api\Web\CategoryController::class,'categorySidebar']);
+});
