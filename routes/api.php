@@ -53,4 +53,17 @@ Route::prefix('web')->group(function() {
 
     //categories sidebar
     Route::get('/categorySidebar',[App\Http\Controllers\Api\Web\CategoryController::class,'categorySidebar']);
+
+    //index posts
+Route::get('/posts', [App\Http\Controllers\Api\Web\PostController::class, 'index']);
+
+//show posts
+Route::get('/posts/{slug}', [App\Http\Controllers\Api\Web\PostController::class, 'show']);
+
+//posts homepage
+Route::get('/postHomepage', [App\Http\Controllers\Api\Web\PostController::class, 'postHomepage']);
+
+//store comment
+Route::post('/posts/storeComment', [App\Http\Controllers\Api\Web\PostController::class, 'storeComment']); 
+
 });
